@@ -1,32 +1,38 @@
-name: Daily Automation Run
+name: Run Playwright TestNG Automation
 
 on:
   schedule:
-    - cron: "15 12 * * *"   # 5:45 PM IST
-  workflow_dispatch:
+    - cron: "15 12 * * *"   # 5:45 PM IST = 12:15 UTC
+  workflow_dispatch:        # Manual trigger
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-    - name: Set up Java
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'temurin'
-        java-version: '17'
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
-    - name: Install Maven Dependencies
-      run: mvn install -DskipTests
+      - name: Install dependencies
+        run: mvn install -DskipTests
 
-    - name: Run TestNG (Playwright)
-      run: mvn test
+      - name: Run TestNG Tests
+        run: mvn test
 
-    - name: Upload TestNG Reports
-      uses: actions/upload-artifact@v3
-      with:
-        name: testng-report
-        path: target/surefire-reports/
+      - name: Upload Test Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: testng-report
+          path: target/surefire-reports/
+
+      - name: Upload Screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: screenshot.png
