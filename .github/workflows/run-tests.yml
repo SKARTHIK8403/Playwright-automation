@@ -1,29 +1,31 @@
-name: Scheduled Playwright Test
+name: Run Playwright Automation Daily
 
 on:
   schedule:
-    - cron: "15 12 * * *"   # 12:15 UTC = 5:45 PM IST
-  workflow_dispatch:
+    - cron: "15 12 * * *"   # Change to IST later (example only)
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      - name: Install Java
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
+    - name: Set up Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
 
-      - name: Install Maven
-        run: sudo apt install maven -y
+    - name: Install Maven Dependencies
+      run: mvn install -DskipTests
 
-      - name: Install Playwright Browsers
-        run: mvn playwright:install
+    - name: Run TestNG Tests (Playwright Script)
+      run: mvn test
 
-      - name: Run Tests
-        run: mvn test
+    - name: Upload Test Reports
+      uses: actions/upload-artifact@v3
+      with:
+        name: testng-report
+        path: target/surefire-reports/
