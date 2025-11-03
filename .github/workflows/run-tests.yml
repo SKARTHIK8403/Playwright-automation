@@ -2,7 +2,7 @@ name: Run Playwright TestNG Automation
 
 on:
   schedule:
-    - cron: "15 12 * * *"   # 5:45 PM IST = 12:15 UTC
+    - cron: "15 12 * * *"   # 5:45 PM IST
   workflow_dispatch:        # Manual trigger
 
 jobs:
