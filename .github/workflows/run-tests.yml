@@ -1,0 +1,29 @@
+name: Scheduled Playwright Test
+
+on:
+  schedule:
+    - cron: "15 12 * * *"   # 12:15 UTC = 5:45 PM IST
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Install Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Install Maven
+        run: sudo apt install maven -y
+
+      - name: Install Playwright Browsers
+        run: mvn playwright:install
+
+      - name: Run Tests
+        run: mvn test
