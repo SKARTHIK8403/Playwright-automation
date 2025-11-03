@@ -1,15 +1,16 @@
-name: Run Playwright Automation Daily
+name: Daily Automation Run
 
 on:
   schedule:
-    - cron: "15 12 * * *"   # Change to IST later (example only)
+    - cron: "15 12 * * *"   # 5:45 PM IST
+  workflow_dispatch:
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
+    - name: Checkout Code
       uses: actions/checkout@v3
 
     - name: Set up Java
@@ -21,10 +22,10 @@ jobs:
     - name: Install Maven Dependencies
       run: mvn install -DskipTests
 
-    - name: Run TestNG Tests (Playwright Script)
+    - name: Run TestNG (Playwright)
       run: mvn test
 
-    - name: Upload Test Reports
+    - name: Upload TestNG Reports
       uses: actions/upload-artifact@v3
       with:
         name: testng-report
